@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Snake Game</title>
+    <style>
+        /* Basic styles for the game */
+        body { font-family: Arial, sans-serif; text-align: center; }
+        canvas { border: 1px solid black; }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Game</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="controls">
+        <button class="button" id="up">↑</button>
+        <br>
+        <button class="button" id="left">←</button>
+        <button class="button" id="down">↓</button>
+        <button class="button" id="right">→</button>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let snake = [{x: 10, y: 10}];
+        let direction = {x: 0, y: 0};
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            snake.forEach(part => {
+                ctx.fillStyle = 'green';
+                ctx.fillRect(part.x * 10, part.y * 10, 10, 10);
+            });
+        }
+
+        function update() {
+            const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+            snake.unshift(head);
+            snake.pop();
+            draw();
+        }
+
+        function changeDirection(event) {
+            switch(event.key) {
+                case 'ArrowUp':
+                case 'w':
+                    direction = {x: 0, y: -1};
+                    break;
+                case 'ArrowDown':
+                case 's':
+                    direction = {x: 0, y: 1};
+                    break;
+                case 'ArrowLeft':
+                case 'a':
+                    direction = {x: -1, y: 0};
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                    direction = {x: 1, y: 0};
+                    break;
+            }
+        }
+
+        function initializeControls() {
+            document.getElementById('up').addEventListener('click', () => { direction = {x: 0, y: -1}; });
+            document.getElementById('down').addEventListener('click', () => { direction = {x: 0, y: 1}; });
+            document.getElementById('left').addEventListener('click', () => { direction = {x: -1, y: 0}; });
+            document.getElementById('right').addEventListener('click', () => { direction = {x: 1, y: 0}; });
+
+            window.addEventListener('keydown', changeDirection);
+        }
+
+        initializeControls();
+        setInterval(update, 100);
+    </script>
+</body>
+</html>
